@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodExpress{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}"><i class="bi bi-egg-fried"></i> FoodExpress</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                {% if user.is_authenticated %}
+                    {% if user.role == 'CUSTOMER' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Restaurants</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'my_orders' %}">My Orders</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="{% url 'cart_view' %}">
+                                <i class="bi bi-cart3"></i> Cart
+                                {% if nav_cart_count %}
+                                <span class="badge rounded-pill bg-danger">{{ nav_cart_count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% elif user.role == 'RESTAURANT' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'restaurant_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'restaurant_menu' %}">Menu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'restaurant_orders' %}">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'restaurant_sales' %}">Sales</a></li>
+                    {% elif user.role == 'DELIVERY' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'delivery_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'delivery_earnings' %}">Earnings</a></li>
+                    {% elif user.role == 'ADMIN' or user.is_superuser %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_users' %}">Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_restaurants' %}">Restaurants</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_orders' %}">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_reports' %}">Reports</a></li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="btn btn-warning btn-sm ms-lg-2" href="{% url 'register_choice' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<main class="container my-4">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="text-center py-4 mt-5 border-top text-muted small">
+    &copy; {% now "Y" %} FoodExpress &mdash; Food Delivery Platform. Built with Django.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

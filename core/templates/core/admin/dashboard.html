@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="dashboard-stat stat-orange"><h3>{{ stats.total_customers }}</h3><p class="mb-0">Customers</p></div></div>
+    <div class="col-md-3"><div class="dashboard-stat stat-blue"><h3>{{ stats.total_restaurants }}</h3><p class="mb-0">Restaurants ({{ stats.pending_restaurant_approvals }} pending)</p></div></div>
+    <div class="col-md-3"><div class="dashboard-stat stat-green"><h3>{{ stats.total_delivery_partners }}</h3><p class="mb-0">Delivery Partners ({{ stats.pending_delivery_approvals }} pending)</p></div></div>
+    <div class="col-md-3"><div class="dashboard-stat stat-purple"><h3>{{ stats.total_orders }}</h3><p class="mb-0">Total Orders</p></div></div>
+</div>
+
+<div class="dashboard-stat stat-orange mb-4">
+    <h3>Rs.{{ stats.total_revenue }}</h3>
+    <p class="mb-0">Total Revenue (Delivered Orders)</p>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'admin_users' %}" class="btn btn-outline-primary">Manage Users</a>
+    <a href="{% url 'admin_restaurants' %}" class="btn btn-outline-primary">Manage Restaurants</a>
+    <a href="{% url 'admin_delivery_partners' %}" class="btn btn-outline-primary">Manage Delivery Partners</a>
+    <a href="{% url 'admin_orders' %}" class="btn btn-outline-primary">Manage Orders</a>
+    <a href="{% url 'admin_categories' %}" class="btn btn-outline-primary">Manage Categories</a>
+    <a href="{% url 'admin_coupons' %}" class="btn btn-outline-primary">Manage Coupons</a>
+    <a href="{% url 'admin_reports' %}" class="btn btn-outline-primary">View Reports</a>
+    <a href="/admin/" class="btn btn-outline-dark">Django Admin Panel</a>
+</div>
+
+<h5 class="fw-bold mb-3">Recent Orders</h5>
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Order</th><th>Customer</th><th>Restaurant</th><th>Status</th><th>Total</th></tr></thead>
+    <tbody>
+    {% for order in recent_orders %}
+        <tr>
+            <td>#{{ order.id }}</td>
+            <td>{{ order.customer.username }}</td>
+            <td>{{ order.restaurant.name }}</td>
+            <td><span class="badge bg-primary">{{ order.get_status_display }}</span></td>
+            <td>Rs.{{ order.total_amount }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">No orders yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

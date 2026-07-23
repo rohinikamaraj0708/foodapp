@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Track Order #{{ order.id }} - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-truck"></i> Track Order #{{ order.id }}</h2>
+
+<div class="card p-4 mb-4">
+    {% if order.status == 'REJECTED' or order.status == 'CANCELLED' %}
+        <div class="alert alert-danger">This order was {{ order.get_status_display|lower }}.</div>
+    {% else %}
+    <div class="progress mb-3" style="height: 10px;">
+        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ order.progress_percent }}%;"></div>
+    </div>
+    <p class="fw-bold">Current status: <span class="badge bg-primary">{{ order.get_status_display }}</span></p>
+    {% endif %}
+
+    <hr>
+    <p><strong>Restaurant:</strong> {{ order.restaurant.name }}</p>
+    <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+    {% if order.delivery_partner %}
+    <p><strong>Delivery Partner:</strong> {{ order.delivery_partner.user.username }} ({{ order.delivery_partner.user.phone }})</p>
+    {% endif %}
+    <p><strong>Payment:</strong> {{ order.payment.get_method_display }} - {{ order.payment.get_status_display }}</p>
+
+    <table class="table mt-3">
+        <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
+        <tbody>
+        {% for item in order.items.all %}
+            <tr><td>{{ item.item_name }}</td><td>{{ item.quantity }}</td><td>Rs.{{ item.line_total }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <p class="mb-1">Subtotal: Rs.{{ order.subtotal }}</p>
+        <p class="mb-1">Discount: -Rs.{{ order.discount_amount }}</p>
+        <p class="mb-1">Delivery Fee: Rs.{{ order.delivery_fee }}</p>
+        <p class="mb-1">Tax: Rs.{{ order.tax_amount }}</p>
+        <h5>Total: Rs.{{ order.total_amount }}</h5>
+    </div>
+</div>
+{% endblock %}

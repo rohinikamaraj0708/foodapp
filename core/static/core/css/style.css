@@ -1,0 +1,107 @@
+:root {
+    --brand-orange: #ff5a1f;
+    --brand-dark: #1f1f1f;
+}
+
+body {
+    background-color: #faf7f2;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.navbar {
+    background-color: var(--brand-dark);
+}
+
+.navbar-brand, .nav-link {
+    color: #fff !important;
+}
+
+.nav-link:hover {
+    color: var(--brand-orange) !important;
+}
+
+.btn-primary, .badge.bg-primary {
+    background-color: var(--brand-orange) !important;
+    border-color: var(--brand-orange) !important;
+}
+
+.btn-outline-primary {
+    color: var(--brand-orange) !important;
+    border-color: var(--brand-orange) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--brand-orange) !important;
+    color: #fff !important;
+}
+
+.card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-img-top {
+    height: 160px;
+    object-fit: cover;
+    border-radius: 14px 14px 0 0;
+    background-color: #eee;
+}
+
+.food-img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #eee;
+}
+
+.badge-veg {
+    color: #1e7e34;
+    border: 1px solid #1e7e34;
+}
+
+.badge-nonveg {
+    color: #c0392b;
+    border: 1px solid #c0392b;
+}
+
+.status-track .step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+
+.status-track .step .dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 auto 6px;
+}
+
+.status-track .step.done .dot {
+    background: var(--brand-orange);
+}
+
+.status-track {
+    display: flex;
+    align-items: flex-start;
+}
+
+.dashboard-stat {
+    border-radius: 14px;
+    padding: 1.25rem;
+    color: #fff;
+}
+
+.stat-orange { background: linear-gradient(135deg, #ff5a1f, #ff9a5a); }
+.stat-green  { background: linear-gradient(135deg, #1e7e34, #4cbf6f); }
+.stat-blue   { background: linear-gradient(135deg, #1f6feb, #4fa1ff); }
+.stat-purple { background: linear-gradient(135deg, #6f42c1, #a97cf0); }

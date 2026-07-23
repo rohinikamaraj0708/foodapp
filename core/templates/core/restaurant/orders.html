@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Manage Orders - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-bag"></i> Manage Orders</h2>
+
+<div class="mb-3 d-flex flex-wrap gap-2">
+    <a href="{% url 'restaurant_orders' %}" class="btn btn-sm {% if not status_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+    {% for code, label in statuses %}
+    <a href="?status={{ code }}" class="btn btn-sm {% if status_filter == code %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+<div class="table-responsive">
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for order in orders %}
+        <tr>
+            <td><a href="{% url 'track_order' order.id %}">#{{ order.id }}</a></td>
+            <td>{{ order.customer.username }}</td>
+            <td>{{ order.items.count }} item(s)</td>
+            <td>Rs.{{ order.total_amount }}</td>
+            <td><span class="badge bg-primary">{{ order.get_status_display }}</span></td>
+            <td>
+                {% if order.status == 'PLACED' %}
+                    <a href="{% url 'restaurant_order_action' order.id 'accept' %}" class="btn btn-sm btn-success">Accept</a>
+                    <a href="{% url 'restaurant_order_action' order.id 'reject' %}" class="btn btn-sm btn-danger">Reject</a>
+                {% elif order.status == 'ACCEPTED' %}
+                    <a href="{% url 'restaurant_order_action' order.id 'preparing' %}" class="btn btn-sm btn-info">Start Preparing</a>
+                {% elif order.status == 'PREPARING' %}
+                    <a href="{% url 'restaurant_order_action' order.id 'ready' %}" class="btn btn-sm btn-warning">Mark Ready</a>
+                {% else %}
+                    <span class="text-muted small">No action</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6" class="text-center text-muted">No orders found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

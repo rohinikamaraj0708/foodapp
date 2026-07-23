@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Manage Categories - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-tags"></i> Manage Food Categories</h2>
+
+<div class="card p-3 mb-4">
+    <form method="post" class="d-flex gap-2">
+        {% csrf_token %}
+        <input type="text" name="name" class="form-control" placeholder="New category name" required>
+        <button type="submit" class="btn btn-primary">Add Category</button>
+    </form>
+</div>
+
+<div class="table-responsive">
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Name</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+    {% for c in categories %}
+        <tr>
+            <td>{{ c.name }}</td>
+            <td>{% if c.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+            <td><a href="{% url 'admin_category_toggle' c.id %}" class="btn btn-sm btn-outline-primary">Toggle</a></td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="3" class="text-center text-muted">No categories yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

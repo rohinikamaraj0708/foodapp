@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Manage Menu - FoodExpress{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-menu-button-wide"></i> Manage Menu</h2>
+    <a href="{% url 'restaurant_menu_add' %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Food Item</a>
+</div>
+
+<div class="row g-3">
+    {% for item in items %}
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="d-flex gap-3">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" class="food-img" alt="{{ item.name }}">
+                {% else %}
+                <div class="food-img d-flex align-items-center justify-content-center text-muted"><i class="bi bi-egg-fried"></i></div>
+                {% endif %}
+                <div class="flex-grow-1">
+                    <h6 class="mb-1">{{ item.name }} {% if not item.is_available %}<span class="badge bg-secondary">Unavailable</span>{% endif %}</h6>
+                    <p class="small text-muted mb-1">{{ item.category.name|default:"Uncategorized" }} &middot; Rs.{{ item.price }}</p>
+                    <a href="{% url 'restaurant_menu_edit' item.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a href="{% url 'restaurant_menu_delete' item.id %}" class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('Delete this item?');">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No menu items yet. Add your first dish!</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Reports - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-bar-chart"></i> Reports</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="dashboard-stat stat-orange"><h3>Rs.{{ total_revenue }}</h3><p class="mb-0">Total Revenue</p></div></div>
+    <div class="col-md-4"><div class="dashboard-stat stat-blue"><h3>{{ total_orders }}</h3><p class="mb-0">Delivered Orders</p></div></div>
+    <div class="col-md-4"><div class="dashboard-stat stat-green"><h3>Rs.{{ average_order_value|floatformat:2 }}</h3><p class="mb-0">Average Order Value</p></div></div>
+</div>
+
+<h5 class="fw-bold mb-3">Top Restaurants by Revenue</h5>
+<table class="table table-bordered bg-white mb-4">
+    <thead><tr><th>Restaurant</th><th>Revenue</th><th>Orders</th></tr></thead>
+    <tbody>
+    {% for r in top_restaurants %}
+        <tr><td>{{ r.restaurant__name }}</td><td>Rs.{{ r.revenue }}</td><td>{{ r.order_count }}</td></tr>
+    {% empty %}
+        <tr><td colspan="3" class="text-center text-muted">No data yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h5 class="fw-bold mb-3">Monthly Revenue</h5>
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Month</th><th>Year</th><th>Revenue</th><th>Orders</th></tr></thead>
+    <tbody>
+    {% for m in monthly %}
+        <tr><td>{{ m.created_at__month }}</td><td>{{ m.created_at__year }}</td><td>Rs.{{ m.revenue }}</td><td>{{ m.order_count }}</td></tr>
+    {% empty %}
+        <tr><td colspan="4" class="text-center text-muted">No data yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

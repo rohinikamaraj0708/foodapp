@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Manage Delivery Partners - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-bicycle"></i> Manage Delivery Partners</h2>
+
+<div class="table-responsive">
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Name</th><th>Vehicle</th><th>Available</th><th>Earnings</th><th>Approval</th><th>Action</th></tr></thead>
+    <tbody>
+    {% for p in partners %}
+        <tr>
+            <td>{{ p.user.username }}</td>
+            <td>{{ p.vehicle_type }} {{ p.vehicle_number }}</td>
+            <td>{% if p.is_available %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</td>
+            <td>Rs.{{ p.total_earnings }}</td>
+            <td>{% if p.is_approved %}<span class="badge bg-success">Approved</span>{% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}</td>
+            <td>
+                <a href="{% url 'admin_toggle_delivery_approval' p.id %}" class="btn btn-sm {% if p.is_approved %}btn-outline-danger{% else %}btn-outline-success{% endif %}">
+                    {% if p.is_approved %}Unapprove{% else %}Approve{% endif %}
+                </a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6" class="text-center text-muted">No delivery partners found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

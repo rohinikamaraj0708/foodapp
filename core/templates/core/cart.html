@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Your Cart - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-cart3"></i> Your Cart</h2>
+
+{% if cart.cart_items.all %}
+<div class="card p-3 mb-4">
+    {% if cart.restaurant %}
+    <p class="text-muted">Ordering from <strong>{{ cart.restaurant.name }}</strong></p>
+    {% endif %}
+    <table class="table align-middle">
+        <thead>
+            <tr><th>Item</th><th>Price</th><th>Quantity</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for item in cart.items %}
+            <tr>
+                <td>{{ item.food_item.name }}</td>
+                <td>Rs.{{ item.food_item.price }}</td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{% url 'update_cart_item' item.id 'decrease' %}" class="btn btn-sm btn-outline-secondary">-</a>
+                        <span>{{ item.quantity }}</span>
+                        <a href="{% url 'update_cart_item' item.id 'increase' %}" class="btn btn-sm btn-outline-secondary">+</a>
+                    </div>
+                </td>
+                <td>Rs.{{ item.line_total }}</td>
+                <td><a href="{% url 'update_cart_item' item.id 'remove' %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <h5>Subtotal: Rs.{{ cart.subtotal }}</h5>
+        <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg mt-2">Proceed to Checkout</a>
+    </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <i class="bi bi-cart-x fs-1"></i>
+    <p class="mt-2">Your cart is empty.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Browse Restaurants</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Manage Orders - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-bag"></i> Manage Orders</h2>
+
+<div class="mb-3 d-flex flex-wrap gap-2">
+    <a href="{% url 'admin_orders' %}" class="btn btn-sm {% if not status_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+    {% for code, label in statuses %}
+    <a href="?status={{ code }}" class="btn btn-sm {% if status_filter == code %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+<div class="table-responsive">
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Order</th><th>Customer</th><th>Restaurant</th><th>Status</th><th>Total</th><th>Date</th><th></th></tr></thead>
+    <tbody>
+    {% for order in orders %}
+        <tr>
+            <td>#{{ order.id }}</td>
+            <td>{{ order.customer.username }}</td>
+            <td>{{ order.restaurant.name }}</td>
+            <td><span class="badge bg-primary">{{ order.get_status_display }}</span></td>
+            <td>Rs.{{ order.total_amount }}</td>
+            <td>{{ order.created_at|date:"d M Y, h:i A" }}</td>
+            <td><a href="{% url 'track_order' order.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="7" class="text-center text-muted">No orders found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}My Earnings - FoodExpress{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-cash-stack"></i> My Earnings</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="dashboard-stat stat-green">
+            <h3>Rs.{{ partner.total_earnings|default:0 }}</h3>
+            <p class="mb-0">Total Earnings</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dashboard-stat stat-blue">
+            <h3>{{ orders.count }}</h3>
+            <p class="mb-0">Completed Deliveries</p>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Order</th><th>Restaurant</th><th>Delivery Fee</th><th>Date</th></tr></thead>
+    <tbody>
+    {% for order in orders %}
+        <tr>
+            <td>#{{ order.id }}</td>
+            <td>{{ order.restaurant.name }}</td>
+            <td>Rs.{{ order.delivery_fee }}</td>
+            <td>{{ order.created_at|date:"d M Y" }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="4" class="text-center text-muted">No completed deliveries yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
